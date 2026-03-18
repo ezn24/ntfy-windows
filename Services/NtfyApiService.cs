@@ -9,9 +9,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Ntfy.WinUI.Client.Models;
+using Ntfy.Windows.Models;
 
-namespace Ntfy.WinUI.Client.Services;
+namespace Ntfy.Windows.Services;
 
 public sealed class NtfyApiService
 {

@@ -1,4 +1,4 @@
-namespace Ntfy.WinUI.Client.Models;
+namespace Ntfy.Windows.Models;
 
 public sealed class PublishOptions
 {

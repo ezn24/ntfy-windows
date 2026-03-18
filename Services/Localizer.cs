@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-namespace Ntfy.WinUI.Client.Services;
+namespace Ntfy.Windows.Services;
 
 public static class Localizer
 {

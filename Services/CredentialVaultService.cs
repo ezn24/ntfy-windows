@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Ntfy.WinUI.Client.Services;
+namespace Ntfy.Windows.Services;
 
 public sealed class CredentialVaultService
 {
@@ -9,7 +9,7 @@ public sealed class CredentialVaultService
 
     public CredentialVaultService()
     {
-        _dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NtfyWinUI", "secrets");
+        _dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NtfyWindows", "secrets");
         Directory.CreateDirectory(_dir);
     }
 

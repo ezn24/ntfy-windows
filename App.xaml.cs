@@ -2,16 +2,16 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
-using Ntfy.WinUI.Client.Services;
+using Ntfy.Windows.Services;
 
-namespace Ntfy.WinUI.Client;
+namespace Ntfy.Windows;
 
 public partial class App : Application
 {
     private Window? _window;
     private static readonly string LogPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "NtfyWinUI",
+        "NtfyWindows",
         "startup.log");
 
     public App()

@@ -1,6 +1,6 @@
 using System;
 
-namespace Ntfy.WinUI.Client.Services;
+namespace Ntfy.Windows.Services;
 
 public static class RuntimePreferences
 {

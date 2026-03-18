@@ -7,11 +7,11 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using Ntfy.WinUI.Client.Models;
-using Ntfy.WinUI.Client.Services;
+using Ntfy.Windows.Models;
+using Ntfy.Windows.Services;
 using Windows.ApplicationModel.DataTransfer;
 
-namespace Ntfy.WinUI.Client.Views;
+namespace Ntfy.Windows.Views;
 
 public sealed partial class InboxPage : Page
 {

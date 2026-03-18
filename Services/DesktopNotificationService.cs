@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using Microsoft.Windows.AppNotifications;
-using Ntfy.WinUI.Client.Models;
+using Ntfy.Windows.Models;
 
-namespace Ntfy.WinUI.Client.Services;
+namespace Ntfy.Windows.Services;
 
 public static class DesktopNotificationService
 {

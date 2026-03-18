@@ -154,7 +154,7 @@ public sealed partial class SettingsPage : Page
 
         try
         {
-            Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = _settings.LanguageCode;
+            global::Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = _settings.LanguageCode;
         }
         catch { }
 

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Ntfy.WinUI.Client.Models;
+using Ntfy.Windows.Models;
 
-namespace Ntfy.WinUI.Client.Services;
+namespace Ntfy.Windows.Services;
 
 public sealed class TemplateService
 {
@@ -12,7 +12,7 @@ public sealed class TemplateService
 
     public TemplateService()
     {
-        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NtfyWinUI");
+        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NtfyWindows");
         Directory.CreateDirectory(dir);
         _filePath = Path.Combine(dir, "templates.json");
     }

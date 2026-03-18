@@ -1,5 +1,5 @@
 <Page
-    x:Class="Ntfy.WinUI.Client.Views.InboxPage"
+    x:Class="Ntfy.Windows.Views.InboxPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -133,7 +133,7 @@
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="local:NtfyMessage" xmlns:local="using:Ntfy.WinUI.Client.Models">
+                    <DataTemplate x:DataType="local:NtfyMessage" xmlns:local="using:Ntfy.Windows.Models">
                         <Grid MinHeight="78" PointerEntered="HoverFrame_PointerEntered" PointerExited="HoverFrame_PointerExited">
                             <Border x:Name="HoverFrame" Margin="0" MinHeight="78" CornerRadius="12" Background="#22FFFFFF" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                             <Border Margin="0" Padding="10" MinHeight="78" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

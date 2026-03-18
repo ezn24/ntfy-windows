@@ -7,12 +7,12 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Ntfy.WinUI.Client.Services;
-using Ntfy.WinUI.Client.Views;
+using Ntfy.Windows.Services;
+using Ntfy.Windows.Views;
 using Windows.Graphics;
 using WinRT.Interop;
 
-namespace Ntfy.WinUI.Client;
+namespace Ntfy.Windows;
 
 public sealed partial class MainWindow : Window
 {

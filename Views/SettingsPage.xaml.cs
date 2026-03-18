@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Ntfy.WinUI.Client.Models;
-using Ntfy.WinUI.Client.Services;
+using Ntfy.Windows.Models;
+using Ntfy.Windows.Services;
 
-namespace Ntfy.WinUI.Client.Views;
+namespace Ntfy.Windows.Views;
 
 public sealed partial class SettingsPage : Page
 {

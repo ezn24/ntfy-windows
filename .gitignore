@@ -1,2 +1,48 @@
+# Build output
 bin/
 obj/
+out/
+artifacts/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.user
+*.rsuser
+*.suo
+
+# Test output
+TestResults/
+*.trx
+
+# Packaging / publishing artifacts
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.msixupload
+*.appxupload
+
+# Logs and local databases
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Local environment / secrets / exported config
+.env
+.env.*
+appsettings*.json
+secrets.*
+*.pfx
+*.p12
+*.snk
+*.pem
+*.key
+*.crt
+*.cer

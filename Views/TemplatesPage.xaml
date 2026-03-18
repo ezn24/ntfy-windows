@@ -1,0 +1,13 @@
+<Page
+    x:Class="Ntfy.WinUI.Client.Views.TemplatesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="16" RowDefinitions="Auto,*" RowSpacing="10">
+        <TextBlock Text="Templates" Style="{ThemeResource TitleTextBlockStyle}"/>
+        <ListView Grid.Row="1" x:Name="TemplateList"/>
+    </Grid>
+</Page>

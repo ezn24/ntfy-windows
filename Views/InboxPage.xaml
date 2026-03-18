@@ -1,0 +1,161 @@
+<Page
+    x:Class="Ntfy.WinUI.Client.Views.InboxPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <x:Double x:Key="UiCorner">12</x:Double>
+
+        <Style x:Key="SquareActionButton" TargetType="Button">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="TopActionButton" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="RoundedTextBox" TargetType="TextBox">
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="RoundedComboBox" TargetType="ComboBox">
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Padding="12" ColumnSpacing="12" RowSpacing="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Padding="12" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+            <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="10">
+                <TextBlock x:Name="TopicsTitleText" Text="Topics" Style="{ThemeResource TitleTextBlockStyle}"/>
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,40" ColumnSpacing="8" HorizontalAlignment="Stretch">
+                    <Border CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                        <TextBox x:Name="NewTopicBox" PlaceholderText="topic name" HorizontalAlignment="Stretch" Style="{StaticResource RoundedTextBox}" BorderThickness="0" Background="Transparent"/>
+                    </Border>
+                    <Button Grid.Column="1" x:Name="AddTopicButton" Content="+" Click="AddTopic_Click" Style="{StaticResource SquareActionButton}"/>
+                </Grid>
+
+                <ListView Grid.Row="2" x:Name="TopicList" SelectionChanged="TopicList_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Hidden" Padding="0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0,0,0,4"/>
+                            <Setter Property="MinHeight" Value="40"/>
+                            <Setter Property="UseSystemFocusVisuals" Value="False"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <ContentPresenter
+                                            Content="{TemplateBinding Content}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Grid Height="40" ColumnDefinitions="*,40" ColumnSpacing="8" PointerEntered="HoverFrame_PointerEntered" PointerExited="HoverFrame_PointerExited">
+                                <Border x:Name="HoverFrame" Grid.Column="0" Margin="0" Height="40" CornerRadius="12" Background="#22FFFFFF" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <Border Grid.Column="0" Height="40" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                    <TextBlock Text="{x:Bind}" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                </Border>
+                                <Button Grid.Column="1" Click="DeleteTopicInline_Click" ToolTipService.ToolTip="Delete topic" Style="{StaticResource SquareActionButton}">
+                                    <FontIcon Glyph="&#xE74D;" FontSize="16"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TextBlock Grid.Row="3" x:Name="StatusText" Foreground="Gray" TextWrapping="Wrap"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid ColumnDefinitions="132,132,120,*,Auto,Auto" ColumnSpacing="8" VerticalAlignment="Center">
+                <Button x:Name="CopySelectedButton" Content="Copy selected" Click="CopySelected_Click" Style="{StaticResource TopActionButton}"/>
+                <Button x:Name="DeleteSelectedButton" Grid.Column="1" Content="Delete selected" Click="DeleteSelected_Click" Style="{StaticResource TopActionButton}"/>
+                <Button x:Name="ClearHistoryButton" Grid.Column="2" Content="Clear history" Click="ClearHistory_Click" Style="{StaticResource TopActionButton}"/>
+                <TextBlock x:Name="MultiSelectLabel" Grid.Column="4" Text="Multi-select" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <ToggleSwitch x:Name="MultiSelectSwitch" Grid.Column="5" Toggled="MultiSelectSwitch_Toggled" VerticalAlignment="Center" OnContent="" OffContent=""/>
+            </Grid>
+
+            <ListView Grid.Row="1" x:Name="MessagesList" ItemsSource="{x:Bind Messages}" SelectionMode="Single" SelectionChanged="MessagesList_SelectionChanged" IsMultiSelectCheckBoxEnabled="False" IsItemClickEnabled="True" ItemClick="MessagesList_ItemClick" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0,0,0,8"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="MinHeight" Value="78"/>
+                        <Setter Property="UseSystemFocusVisuals" Value="False"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <ContentPresenter
+                                        Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:NtfyMessage" xmlns:local="using:Ntfy.WinUI.Client.Models">
+                        <Grid MinHeight="78" PointerEntered="HoverFrame_PointerEntered" PointerExited="HoverFrame_PointerExited">
+                            <Border x:Name="HoverFrame" Margin="0" MinHeight="78" CornerRadius="12" Background="#22FFFFFF" Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                            <Border Margin="0" Padding="10" MinHeight="78" CornerRadius="12" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind Topic}" FontSize="12"/>
+                                    <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{x:Bind Message}" TextWrapping="WrapWholeWords"/>
+                                    <TextBlock Text="{x:Bind Timestamp}" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Border Grid.Row="2" Padding="10" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <Grid ColumnDefinitions="Auto,*,96" ColumnSpacing="8" VerticalAlignment="Center">
+                    <ComboBox x:Name="TemplateBox" PlaceholderText="Type template" MinWidth="160" MaxWidth="220" Style="{StaticResource RoundedComboBox}"/>
+                    <TextBox x:Name="ComposeBox" Grid.Column="1" PlaceholderText="Write a message..." Style="{StaticResource RoundedTextBox}" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="40" MaxHeight="120"/>
+                    <Button x:Name="SendButton" Grid.Column="2" Content="Send" Click="Send_Click" Style="{StaticResource TopActionButton}"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

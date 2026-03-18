@@ -1,0 +1,83 @@
+<Page
+    x:Class="Ntfy.WinUI.Client.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Padding="20" Spacing="14" HorizontalAlignment="Stretch" MinWidth="760">
+            <TextBlock x:Name="SettingsTitleText" Text="Settings" Style="{ThemeResource TitleTextBlockStyle}" FontSize="30"/>
+
+            <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="InstanceTitle" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBox x:Name="ServerNameBox" MinHeight="44" FontSize="15"/>
+                    <TextBox x:Name="BaseUrlBox" MinHeight="44" FontSize="15" PlaceholderText="https://ntfy.yourdomain.com"/>
+                </StackPanel>
+            </Border>
+
+            <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="AuthTitle" FontSize="18" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="AuthModeBox" MinHeight="44" FontSize="15">
+                        <x:String>None</x:String>
+                        <x:String>Bearer</x:String>
+                        <x:String>Basic</x:String>
+                    </ComboBox>
+                    <TextBox x:Name="UsernameBox" MinHeight="44" FontSize="15"/>
+                    <PasswordBox x:Name="SecretBox" MinHeight="44" FontSize="15"/>
+                </StackPanel>
+            </Border>
+
+            <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="AppearanceTitle" FontSize="18" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="ThemeModeBox" MinHeight="44" FontSize="15">
+                        <x:String>System</x:String>
+                        <x:String>Light</x:String>
+                        <x:String>Dark</x:String>
+                    </ComboBox>
+                    <ComboBox x:Name="LanguageBox" MinHeight="44" FontSize="15">
+                        <x:String>English</x:String>
+                        <x:String>繁體中文</x:String>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+
+            <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="TopicsTitle" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBox x:Name="TopicsCsvBox" MinHeight="44" FontSize="15" PlaceholderText="alerts, updates, ops"/>
+                </StackPanel>
+            </Border>
+
+            <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="NotificationsTitle" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBox x:Name="PollIntervalBox" MinHeight="44" FontSize="15"/>
+                    <TextBox x:Name="DateFormatBox" MinHeight="44" FontSize="15"/>
+                    <ToggleSwitch x:Name="StickyNotifySwitch" FontSize="15"/>
+                    <TextBox x:Name="TimedNotifyBox" MinHeight="44" FontSize="15"/>
+                </StackPanel>
+            </Border>
+
+            <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <StackPanel Spacing="10">
+                    <TextBlock x:Name="GeneralTitle" FontSize="18" FontWeight="SemiBold"/>
+                    <ToggleSwitch x:Name="QuitOnCloseSwitch" FontSize="15"/>
+                    <ToggleSwitch x:Name="StartHiddenSwitch" FontSize="15"/>
+                    <ToggleSwitch x:Name="HotkeysSwitch" FontSize="15"/>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Name="SaveButton" Content="Save" Click="Save_Click" MinWidth="120" MinHeight="42"/>
+                <Button x:Name="ReloadButton" Content="Reload" Click="Reload_Click" MinWidth="120" MinHeight="42"/>
+            </StackPanel>
+
+            <TextBlock x:Name="StatusText" Foreground="Gray" TextWrapping="Wrap"/>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

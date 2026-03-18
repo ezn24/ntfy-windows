@@ -1,0 +1,44 @@
+<Window
+    x:Class="Ntfy.WinUI.Client.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Ntfy.WinUI.Client"
+    mc:Ignorable="d"
+    Title="ntfy Client">
+
+    <NavigationView x:Name="RootNav"
+                    Margin="0,36,0,0"
+                    PaneDisplayMode="LeftCompact"
+                    IsBackButtonVisible="Collapsed"
+                    IsPaneToggleButtonVisible="True"
+                    IsSettingsVisible="True"
+                    SelectionChanged="RootNav_SelectionChanged">
+        <NavigationView.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.ThemeDictionaries>
+                    <ResourceDictionary x:Key="Light">
+                        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FFF5F5F5"/>
+                        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FFF5F5F5"/>
+                        <SolidColorBrush x:Key="NavigationViewCompactPaneBackground" Color="#FFF5F5F5"/>
+                    </ResourceDictionary>
+                    <ResourceDictionary x:Key="Dark">
+                        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FF202020"/>
+                        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FF202020"/>
+                        <SolidColorBrush x:Key="NavigationViewCompactPaneBackground" Color="#FF202020"/>
+                    </ResourceDictionary>
+                </ResourceDictionary.ThemeDictionaries>
+            </ResourceDictionary>
+        </NavigationView.Resources>
+        <NavigationView.MenuItems>
+            <NavigationViewItem x:Name="ChatNavItem" Content="Topics" Tag="inbox">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="Message" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+
+        <Frame x:Name="ContentFrame" />
+    </NavigationView>
+</Window>

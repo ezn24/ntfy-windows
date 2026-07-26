@@ -118,8 +118,6 @@ jobs:
 
     permissions:
       contents: write
-      id-token: write
-      attestations: write
 
     steps:
       - name: Download all build artifacts
@@ -146,11 +144,6 @@ jobs:
             cat SHA256SUMS.txt
             exit 1
           fi
-
-      - name: Attest release artifacts
-        uses: actions/attest@v4
-        with:
-          subject-checksums: release-assets/SHA256SUMS.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

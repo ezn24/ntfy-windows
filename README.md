@@ -40,18 +40,16 @@ This scaffold is implementation-first (services/models/UI shell). If your machin
 - Formats: self-contained portable ZIP and per-user Inno Setup installer for every architecture
 
 
-- Tagged releases include `SHA256SUMS.txt` and GitHub build provenance attestations; no signing key is required
+- Tagged releases include `SHA256SUMS.txt`; no signing key is required
 
 ### Release integrity
 
 Every tagged release contains:
 
 - `SHA256SUMS.txt` for all portable ZIP and installer files
-- GitHub Sigstore provenance for all portable ZIP and installer files
 
 Verify a downloaded release:
 
 ```bash
 sha256sum --check SHA256SUMS.txt
-gh attestation verify ntfy-windows-win-x64-setup.exe --repo ezn24/ntfy-windows
 ```

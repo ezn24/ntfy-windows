@@ -15,6 +15,8 @@
                     <TextBlock x:Name="InstanceTitle" FontSize="18" FontWeight="SemiBold"/>
                     <TextBox x:Name="ServerNameBox" MinHeight="44" FontSize="15"/>
                     <TextBox x:Name="BaseUrlBox" MinHeight="44" FontSize="15" PlaceholderText="https://ntfy.yourdomain.com"/>
+                    <Button x:Name="TestInstanceButton" Click="TestConnection_Click" MinWidth="132" MinHeight="42" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="InstanceTestStatusText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
 
@@ -28,6 +30,8 @@
                     </ComboBox>
                     <TextBox x:Name="UsernameBox" MinHeight="44" FontSize="15"/>
                     <PasswordBox x:Name="SecretBox" MinHeight="44" FontSize="15"/>
+                    <Button x:Name="TestConnectionButton" Click="TestConnection_Click" MinWidth="132" MinHeight="42" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="AuthTestStatusText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
 
@@ -56,7 +60,6 @@
             <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
                 <StackPanel Spacing="10">
                     <TextBlock x:Name="NotificationsTitle" FontSize="18" FontWeight="SemiBold"/>
-                    <TextBox x:Name="PollIntervalBox" MinHeight="44" FontSize="15"/>
                     <TextBox x:Name="DateFormatBox" MinHeight="44" FontSize="15"/>
                     <ToggleSwitch x:Name="StickyNotifySwitch" FontSize="15"/>
                     <TextBox x:Name="TimedNotifyBox" MinHeight="44" FontSize="15"/>
@@ -66,9 +69,8 @@
             <Border CornerRadius="16" Padding="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
                 <StackPanel Spacing="10">
                     <TextBlock x:Name="GeneralTitle" FontSize="18" FontWeight="SemiBold"/>
-                    <ToggleSwitch x:Name="QuitOnCloseSwitch" FontSize="15"/>
-                    <ToggleSwitch x:Name="StartHiddenSwitch" FontSize="15"/>
-                    <ToggleSwitch x:Name="HotkeysSwitch" FontSize="15"/>
+                    <ToggleSwitch x:Name="CloseToTraySwitch" FontSize="15"/>
+                    <ToggleSwitch x:Name="StartMinimizedToTraySwitch" FontSize="15"/>
                 </StackPanel>
             </Border>
 

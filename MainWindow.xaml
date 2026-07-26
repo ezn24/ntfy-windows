@@ -8,37 +8,40 @@
     mc:Ignorable="d"
     Title="ntfy-windows">
 
-    <NavigationView x:Name="RootNav"
-                    Margin="0,36,0,0"
-                    PaneDisplayMode="LeftCompact"
-                    IsBackButtonVisible="Collapsed"
-                    IsPaneToggleButtonVisible="True"
-                    IsSettingsVisible="True"
-                    SelectionChanged="RootNav_SelectionChanged">
-        <NavigationView.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.ThemeDictionaries>
-                    <ResourceDictionary x:Key="Light">
-                        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FFF5F5F5"/>
-                        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FFF5F5F5"/>
-                        <SolidColorBrush x:Key="NavigationViewCompactPaneBackground" Color="#FFF5F5F5"/>
-                    </ResourceDictionary>
-                    <ResourceDictionary x:Key="Dark">
-                        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FF202020"/>
-                        <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FF202020"/>
-                        <SolidColorBrush x:Key="NavigationViewCompactPaneBackground" Color="#FF202020"/>
-                    </ResourceDictionary>
-                </ResourceDictionary.ThemeDictionaries>
-            </ResourceDictionary>
-        </NavigationView.Resources>
-        <NavigationView.MenuItems>
-            <NavigationViewItem x:Name="ChatNavItem" Content="Topics" Tag="inbox">
-                <NavigationViewItem.Icon>
-                    <SymbolIcon Symbol="Message" />
-                </NavigationViewItem.Icon>
-            </NavigationViewItem>
-        </NavigationView.MenuItems>
+    <Grid x:Name="RootGrid">
+        <NavigationView x:Name="RootNav"
+                        Margin="0,36,0,0"
+                        PaneDisplayMode="LeftCompact"
+                        IsBackButtonVisible="Collapsed"
+                        IsPaneToggleButtonVisible="True"
+                        IsSettingsVisible="True"
+                        SelectionChanged="RootNav_SelectionChanged">
+            <NavigationView.Resources>
+                <ResourceDictionary>
+                    <Thickness x:Key="NavigationViewButtonHolderGridMargin">0,32,0,4</Thickness>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceDictionary x:Key="Light">
+                            <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FFF5F5F5"/>
+                            <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FFF5F5F5"/>
+                            <SolidColorBrush x:Key="NavigationViewCompactPaneBackground" Color="#FFF5F5F5"/>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="Dark">
+                            <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="#FF202020"/>
+                            <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="#FF202020"/>
+                            <SolidColorBrush x:Key="NavigationViewCompactPaneBackground" Color="#FF202020"/>
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+                </ResourceDictionary>
+            </NavigationView.Resources>
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="ChatNavItem" Content="Topics" Tag="inbox" Margin="0,28,0,0">
+                    <NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Message" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
 
-        <Frame x:Name="ContentFrame" />
-    </NavigationView>
+            <Frame x:Name="ContentFrame" />
+        </NavigationView>
+    </Grid>
 </Window>

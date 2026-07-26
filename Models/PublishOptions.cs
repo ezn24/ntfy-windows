@@ -7,6 +7,9 @@ public sealed class PublishOptions
     public string? TagsCsv { get; set; }
     public string? ClickUrl { get; set; }
     public string? AttachUrl { get; set; }
+    public string? Filename { get; set; }
+    public string? IconUrl { get; set; }
+    public string? Actions { get; set; }
     public string? Delay { get; set; }
     public string? Email { get; set; }
     public string? Call { get; set; }

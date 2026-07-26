@@ -14,10 +14,10 @@ public static class Localizer
         var lang = RuntimePreferences.LanguageCode;
         var baseDir = AppContext.BaseDirectory;
         var i18nDir = Path.Combine(baseDir, "i18n");
-        var path = Path.Combine(i18nDir, $"{lang}.json");
+        var path = FindLanguageFile(i18nDir, lang);
 
-        if (!File.Exists(path))
-            path = Path.Combine(i18nDir, "en-US.json");
+        if (path is null)
+            path = FindLanguageFile(i18nDir, "en") ?? Path.Combine(i18nDir, "en-US.json");
 
         try
         {
@@ -34,5 +34,27 @@ public static class Localizer
     {
         if (_map.Count == 0) Reload();
         return _map.TryGetValue(key, out var v) ? v : key;
+    }
+
+    private static string? FindLanguageFile(string i18nDir, string lang)
+    {
+        var candidates = new[]
+        {
+            lang,
+            lang.Replace('-', '_'),
+            lang.Replace('_', '-'),
+            lang.Equals("en", StringComparison.OrdinalIgnoreCase) ? "en-US" : string.Empty,
+            lang.Equals("en-US", StringComparison.OrdinalIgnoreCase) ? "en" : string.Empty,
+            lang.Equals("zh_Hant", StringComparison.OrdinalIgnoreCase) ? "zh-Hant" : string.Empty,
+            lang.Equals("zh-Hant", StringComparison.OrdinalIgnoreCase) ? "zh_Hant" : string.Empty
+        };
+
+        foreach (var candidate in candidates.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            var path = Path.Combine(i18nDir, $"{candidate}.json");
+            if (File.Exists(path)) return path;
+        }
+
+        return null;
     }
 }

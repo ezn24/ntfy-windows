@@ -46,3 +46,6 @@ secrets.*
 *.key
 *.crt
 *.cer
+
+# Local visual verification
+work/

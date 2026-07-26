@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Ntfy.Windows.Models;
 
@@ -10,6 +11,7 @@ namespace Ntfy.Windows.Services;
 
 public sealed class MessageLogService
 {
+    private static readonly SemaphoreSlim FileLock = new(1, 1);
     private readonly string _filePath;
 
     public MessageLogService()
@@ -19,18 +21,30 @@ public sealed class MessageLogService
         _filePath = Path.Combine(dir, "messages.json");
     }
 
-    public async Task<List<NtfyMessage>> LoadAsync(int max = 500)
+    public async Task<List<NtfyMessage>> LoadAsync(int max = 2000)
     {
-        if (!File.Exists(_filePath)) return [];
-        var json = await File.ReadAllTextAsync(_filePath);
-        var list = JsonSerializer.Deserialize<List<NtfyMessage>>(json) ?? [];
-        return list.OrderByDescending(x => x.Timestamp).Take(max).ToList();
+        await FileLock.WaitAsync();
+        try
+        {
+            if (!File.Exists(_filePath)) return [];
+            var json = await File.ReadAllTextAsync(_filePath);
+            var list = JsonSerializer.Deserialize<List<NtfyMessage>>(json) ?? [];
+            return list.OrderByDescending(x => x.Timestamp).Take(max).ToList();
+        }
+        finally { FileLock.Release(); }
     }
 
-    public async Task SaveAsync(IEnumerable<NtfyMessage> messages, int max = 500)
+    public async Task SaveAsync(IEnumerable<NtfyMessage> messages, int max = 2000)
     {
         var trimmed = messages.OrderByDescending(x => x.Timestamp).Take(max).ToList();
-        var json = JsonSerializer.Serialize(trimmed, new JsonSerializerOptions { WriteIndented = true });
-        await File.WriteAllTextAsync(_filePath, json);
+        await FileLock.WaitAsync();
+        try
+        {
+            var json = JsonSerializer.Serialize(trimmed, new JsonSerializerOptions { WriteIndented = true });
+            var tempPath = _filePath + ".tmp";
+            await File.WriteAllTextAsync(tempPath, json);
+            File.Move(tempPath, _filePath, true);
+        }
+        finally { FileLock.Release(); }
     }
 }

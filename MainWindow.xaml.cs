@@ -7,9 +7,11 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Ntfy.Windows.Models;
 using Ntfy.Windows.Services;
 using Ntfy.Windows.Views;
 using Windows.Graphics;
+using Windows.UI;
 using WinRT.Interop;
 
 namespace Ntfy.Windows;
@@ -20,6 +22,7 @@ public sealed partial class MainWindow : Window
     private const int WM_COMMAND = 0x0111;
     private const int WM_CLOSE = 0x0010;
     private const int WM_SETICON = 0x0080;
+    private const int WM_GETMINMAXINFO = 0x0024;
     private const int WM_LBUTTONUP = 0x0202;
     private const int WM_LBUTTONDBLCLK = 0x0203;
     private const int WM_RBUTTONUP = 0x0205;
@@ -53,13 +56,21 @@ public sealed partial class MainWindow : Window
     private IntPtr _hIcon;
     private bool _trayAdded;
     private bool _allowClose;
+    private System.Windows.Forms.NotifyIcon? _notifyIcon;
+    private System.Windows.Forms.ContextMenuStrip? _trayMenu;
 
     private WndProcDelegate? _wndProcDelegate;
     private IntPtr _oldWndProc;
 
-    public MainWindow()
+    public MainWindow(AppSettings? initialSettings = null)
     {
         InitializeComponent();
+        if (initialSettings is not null)
+        {
+            RuntimePreferences.Set(initialSettings.ThemeMode, initialSettings.LanguageCode, initialSettings.DateTimeFormat, initialSettings.CloseToTray);
+            DesktopNotificationService.Configure(initialSettings.StickyNotifications, initialSettings.TimedNotificationSeconds);
+        }
+
         ContentFrame.Navigate(typeof(InboxPage));
         _ = ApplyAppearanceAsync();
 
@@ -69,6 +80,48 @@ public sealed partial class MainWindow : Window
 
         Closed += (_, _) => CleanupTray();
         RuntimePreferences.Changed += ApplyRuntimePreferences;
+    }
+
+    public void HideToTray()
+    {
+        try { _appWindow?.Hide(); } catch { }
+        try { ShowWindow(_hwnd, SW_HIDE); } catch { }
+    }
+
+    public void ShowWindowFromApp()
+    {
+        try { _appWindow?.Show(); } catch { }
+        try { ShowWindow(_hwnd, SW_SHOW); } catch { }
+        Activate();
+    }
+
+    public bool IsTrayAvailable => _notifyIcon?.Visible == true || _trayAdded;
+
+    public void ShowWindowOverlay(FrameworkElement content)
+    {
+        HideWindowOverlay();
+
+        var overlay = new Grid
+        {
+            Name = "WindowOverlay",
+            Background = new SolidColorBrush(Color.FromArgb(140, 0, 0, 0)),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            Children = { content }
+        };
+        Canvas.SetZIndex(overlay, 100);
+        RootGrid.Children.Add(overlay);
+    }
+
+    public void HideWindowOverlay()
+    {
+        var overlays = RootGrid.Children
+            .OfType<FrameworkElement>()
+            .Where(x => x.Name == "WindowOverlay")
+            .ToList();
+
+        foreach (var overlay in overlays)
+            RootGrid.Children.Remove(overlay);
     }
 
     private void TryApplyWin11Backdrop()
@@ -95,7 +148,11 @@ public sealed partial class MainWindow : Window
             }
 
             if (_appWindow is not null)
+            {
                 _appWindow.Closing += AppWindow_Closing;
+                if (_appWindow.Size.Width < 1180 || _appWindow.Size.Height < 680)
+                    _appWindow.Resize(new SizeInt32(1280, 760));
+            }
 
             HookWindowProc();
         }
@@ -109,6 +166,9 @@ public sealed partial class MainWindow : Window
             if (_hwnd == IntPtr.Zero) return;
 
             var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Icons", "ntfy.ico");
+            if (TryInitNotifyIcon(iconPath))
+                return;
+
             _hIcon = LoadImage(IntPtr.Zero, iconPath, IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
 
             var data = NewNotifyData();
@@ -130,19 +190,63 @@ public sealed partial class MainWindow : Window
         catch { }
     }
 
+    private bool TryInitNotifyIcon(string iconPath)
+    {
+        try
+        {
+            if (!File.Exists(iconPath)) return false;
+
+            _trayMenu = new System.Windows.Forms.ContextMenuStrip();
+            _trayMenu.Items.Add(Localizer.T("Open"), null, (_, _) => DispatcherQueue.TryEnqueue(ShowFromTray));
+            _trayMenu.Items.Add(new System.Windows.Forms.ToolStripSeparator());
+            _trayMenu.Items.Add(Localizer.T("Exit"), null, (_, _) => DispatcherQueue.TryEnqueue(ExitFromTray));
+
+            _notifyIcon = new System.Windows.Forms.NotifyIcon
+            {
+                Icon = new System.Drawing.Icon(iconPath),
+                Text = Localizer.T("AppName"),
+                ContextMenuStrip = _trayMenu,
+                Visible = true
+            };
+
+            _notifyIcon.MouseUp += (_, e) =>
+            {
+                if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                    DispatcherQueue.TryEnqueue(ShowFromTray);
+            };
+
+            _notifyIcon.DoubleClick += (_, _) => DispatcherQueue.TryEnqueue(ShowFromTray);
+            return true;
+        }
+        catch
+        {
+            _notifyIcon?.Dispose();
+            _notifyIcon = null;
+            _trayMenu?.Dispose();
+            _trayMenu = null;
+            return false;
+        }
+    }
+
     private void AppWindow_Closing(AppWindow sender, AppWindowClosingEventArgs args)
     {
         if (_allowClose) return;
+        if (!RuntimePreferences.CloseToTray || !IsTrayAvailable)
+        {
+            _allowClose = true;
+            CleanupTray();
+            return;
+        }
+
         args.Cancel = true;
-        try { ShowWindow(_hwnd, SW_HIDE); } catch { }
+        HideToTray();
     }
 
     private void ShowFromTray()
     {
         try
         {
-            ShowWindow(_hwnd, SW_SHOW);
-            Activate();
+            ShowWindowFromApp();
         }
         catch { }
     }
@@ -159,9 +263,9 @@ public sealed partial class MainWindow : Window
         try
         {
             var menu = CreatePopupMenu();
-            AppendMenu(menu, MF_STRING, CMD_OPEN, "Open");
+            AppendMenu(menu, MF_STRING, CMD_OPEN, Localizer.T("Open"));
             AppendMenu(menu, MF_SEPARATOR, 0, string.Empty);
-            AppendMenu(menu, MF_STRING, CMD_EXIT, "Exit");
+            AppendMenu(menu, MF_STRING, CMD_EXIT, Localizer.T("Exit"));
 
             GetCursorPos(out var pt);
             SetForegroundWindow(_hwnd);
@@ -174,7 +278,8 @@ public sealed partial class MainWindow : Window
     private async Task ApplyAppearanceAsync()
     {
         var settings = await _settingsService.LoadAsync();
-        RuntimePreferences.Set(settings.ThemeMode, settings.LanguageCode);
+        RuntimePreferences.Set(settings.ThemeMode, settings.LanguageCode, settings.DateTimeFormat, settings.CloseToTray);
+        DesktopNotificationService.Configure(settings.StickyNotifications, settings.TimedNotificationSeconds);
         ApplyRuntimePreferences();
     }
 
@@ -194,6 +299,19 @@ public sealed partial class MainWindow : Window
             fe.RequestedTheme = theme;
 
         ChatNavItem.Content = Localizer.T("TopicNav");
+        UpdateTrayText();
+    }
+
+    private void UpdateTrayText()
+    {
+        if (_notifyIcon is not null)
+            _notifyIcon.Text = Localizer.T("AppName");
+
+        if (_trayMenu is { Items.Count: >= 3 })
+        {
+            _trayMenu.Items[0].Text = Localizer.T("Open");
+            _trayMenu.Items[2].Text = Localizer.T("Exit");
+        }
     }
 
     private void RootNav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -219,6 +337,14 @@ public sealed partial class MainWindow : Window
 
     private IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
     {
+        if (msg == WM_GETMINMAXINFO)
+        {
+            var info = Marshal.PtrToStructure<MINMAXINFO>(lParam);
+            info.ptMinTrackSize.X = 1180;
+            info.ptMinTrackSize.Y = 680;
+            Marshal.StructureToPtr(info, lParam, true);
+            return IntPtr.Zero;
+        }
         if (msg == WM_TRAYICON)
         {
             var eventId = lParam.ToInt32();
@@ -252,6 +378,16 @@ public sealed partial class MainWindow : Window
     {
         try
         {
+            if (_notifyIcon is not null)
+            {
+                _notifyIcon.Visible = false;
+                _notifyIcon.Dispose();
+                _notifyIcon = null;
+            }
+
+            _trayMenu?.Dispose();
+            _trayMenu = null;
+
             if (_trayAdded)
             {
                 var data = NewNotifyData();
@@ -315,6 +451,16 @@ public sealed partial class MainWindow : Window
     {
         public int X;
         public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MINMAXINFO
+    {
+        public POINT ptReserved;
+        public POINT ptMaxSize;
+        public POINT ptMaxPosition;
+        public POINT ptMinTrackSize;
+        public POINT ptMaxTrackSize;
     }
 
     private delegate IntPtr WndProcDelegate(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);

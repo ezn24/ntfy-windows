@@ -66,6 +66,7 @@ public partial class App : Application
             }
 
             _window.Activate();
+            _ = MainWindow.CheckForUpdatesOnStartupAsync();
             Log("Launch", "MainWindow activated");
         }
         catch (Exception ex)

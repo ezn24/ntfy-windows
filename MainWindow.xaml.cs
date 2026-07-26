@@ -93,6 +93,7 @@ public sealed partial class MainWindow : Window
         try { _appWindow?.Show(); } catch { }
         try { ShowWindow(_hwnd, SW_SHOW); } catch { }
         Activate();
+        _ = CheckForUpdatesOnStartupAsync();
     }
 
     public bool IsTrayAvailable => _notifyIcon?.Visible == true || _trayAdded;

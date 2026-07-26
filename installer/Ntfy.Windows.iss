@@ -20,11 +20,14 @@
 AppId={{9B078E63-3A65-4AC8-B922-9FFCB3BE9C0A}
 AppName=ntfy-windows
 AppVersion={#AppVersion}
+AppVerName=ntfy-windows
 AppPublisher=ntfy-windows
-DefaultDirName={localappdata}\Programs\ntfy-windows
+DefaultDirName={autopf}\ntfy-windows
+UsePreviousAppDir=no
 DefaultGroupName=ntfy-windows
 DisableProgramGroupPage=yes
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
+UsedUserAreasWarning=no
 OutputDir=..\artifacts
 OutputBaseFilename=ntfy-windows-win-{#ArchitectureName}-setup
 SetupIconFile=..\Assets\Icons\ntfy.ico
@@ -55,5 +58,29 @@ Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 
 Name: "{group}\ntfy-windows"; Filename: "{app}\ntfy-windows.exe"
 Name: "{autodesktop}\ntfy-windows"; Filename: "{app}\ntfy-windows.exe"; Tasks: desktopicon
 
+[InstallDelete]
+Type: filesandordirs; Name: "{localappdata}\Programs\ntfy-windows"
+
+[Registry]
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: none; ValueName: "ntfy-windows"; Flags: uninsdeletevalue
+
+[UninstallRun]
+Filename: "{cmd}"; Parameters: "/C taskkill /IM ntfy-windows.exe /F >nul 2>&1"; Flags: runhidden waituntilterminated; RunOnceId: "StopNtfyWindows"
+
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}"
+Type: filesandordirs; Name: "{localappdata}\NtfyWindows"
+
 [Run]
 Filename: "{app}\ntfy-windows.exe"; Description: "Launch ntfy-windows"; Flags: nowait postinstall skipifsilent
+
+[Code]
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{cmd}'),
+    '/C taskkill /IM ntfy-windows.exe /F >nul 2>&1',
+    '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Result := '';
+end;

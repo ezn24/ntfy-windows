@@ -17,6 +17,8 @@ public sealed class AppSettings
 
     public bool CloseToTray { get; set; } = true;
     public bool StartMinimizedToTray { get; set; } = false;
+    public bool StartWithWindows { get; set; } = false;
+    public bool AutoCheckForUpdates { get; set; } = true;
 
     public string ThemeMode { get; set; } = "System"; // System/Light/Dark
     public string LanguageCode { get; set; } = "en"; // en/zh_Hant, with legacy en-US/zh-Hant aliases

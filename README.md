@@ -37,7 +37,15 @@ This scaffold is implementation-first (services/models/UI shell). If your machin
 - Manual build: run `Build Release` from Actions; all files are available as workflow artifacts
 - Tagged release: push a tag such as `v1.0.0` to create a GitHub Release automatically
 - Architectures: `x86`, `x64`, and `ARM64`
-- Formats: self-contained portable ZIP and per-user Inno Setup installer for every architecture
+- Formats: self-contained portable ZIP and per-machine Inno Setup installer for every architecture
+- Installer default: `Program Files\ntfy-windows` (`Program Files (x86)` for x86 on 64-bit Windows)
+- A full uninstall removes the installation directory, local app data, credentials, message history, templates, and the Windows sign-in startup entry
+
+## Updates
+
+The settings page supports Windows sign-in startup, automatic update checks, and manual update checks. Updates are read from the latest GitHub Release, matched to the current architecture, downloaded as an installer, and verified with SHA-256 before launch.
+
+The repository and its GitHub Releases must be publicly readable for installed clients to check for updates without a GitHub access token.
 
 
 - Tagged releases include `SHA256SUMS.txt`; no signing key is required

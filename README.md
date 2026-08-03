@@ -2,6 +2,8 @@
 
 # ntfy-windows
 
+![ntfy-windows interface preview](docs/screenshots/app-preview.jpg)
+
 Windows 11 style ntfy desktop client (WinUI 3) with:
 - authenticated subscriptions (Bearer + Basic)
 - modern Fluent UI shell

@@ -129,9 +129,9 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="local:NtfyMessage">
                         <Border Padding="12" MinHeight="88" CornerRadius="8" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" PointerEntered="MessageCard_PointerEntered" PointerExited="MessageCard_PointerExited">
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                                <TextBlock Text="{x:Bind UnreadIndicator, Mode=OneWay}" Margin="-10,-8,0,0" FontSize="24" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" IsHitTestVisible="False"/>
-                                <StackPanel Grid.Column="0" Spacing="4">
+                            <Grid ColumnDefinitions="10,*,Auto" ColumnSpacing="12">
+                                <TextBlock Grid.Column="0" Text="{x:Bind UnreadIndicator, Mode=OneWay}" FontSize="24" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                                <StackPanel Grid.Column="1" Spacing="4">
                                     <Grid ColumnDefinitions="Auto,*">
                                         <TextBlock Text="{x:Bind Topic}" Visibility="{x:Bind TopicVisibility, Mode=OneWay}" Margin="0,0,8,0" FontSize="12" FontWeight="SemiBold" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
                                         <TextBlock Grid.Column="1" Text="{x:Bind Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
@@ -139,7 +139,7 @@
                                     <TextBlock Text="{x:Bind Message}" TextWrapping="WrapWholeWords" MaxLines="3"/>
                                     <TextBlock Text="{x:Bind MetadataSummary}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="WrapWholeWords" MaxLines="2"/>
                                 </StackPanel>
-                                <TextBlock Grid.Column="1" Text="{x:Bind DisplayTimestamp}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{x:Bind DisplayTimestamp}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

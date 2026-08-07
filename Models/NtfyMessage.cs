@@ -2,6 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Ntfy.Windows.Services;
 
 namespace Ntfy.Windows.Models;
@@ -53,12 +56,26 @@ public sealed class NtfyMessage : INotifyPropertyChanged
     public Microsoft.UI.Xaml.Visibility TopicVisibility => ShowTopic ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
     public string DisplayTimestamp => Timestamp.ToLocalTime().ToString(RuntimePreferences.DateTimeFormat);
     public string UnreadIndicator => IsRead ? string.Empty : "\u2022";
+    public Visibility IconVisibility => TryGetIconUri(out _) ? Visibility.Visible : Visibility.Collapsed;
+    public ImageSource? IconSource => TryGetIconUri(out var uri) ? new BitmapImage(uri) : null;
+
+    private bool TryGetIconUri(out Uri? uri)
+    {
+        if (Uri.TryCreate(IconUrl, UriKind.Absolute, out var candidate) &&
+            (candidate.Scheme == Uri.UriSchemeHttp || candidate.Scheme == Uri.UriSchemeHttps))
+        {
+            uri = candidate;
+            return true;
+        }
+
+        uri = null;
+        return false;
+    }
     public string MetadataSummary => string.Join("  ", new[]
     {
         string.IsNullOrWhiteSpace(TagsCsv) ? null : EmojiTagFormatter.Format(TagsCsv),
         string.IsNullOrWhiteSpace(ClickUrl) ? null : Localizer.T("HasClickLink"),
         string.IsNullOrWhiteSpace(AttachmentName) && string.IsNullOrWhiteSpace(AttachmentUrl) ? null : $"{Localizer.T("Attachment")}: {AttachmentName ?? AttachmentUrl}",
-        string.IsNullOrWhiteSpace(IconUrl) ? null : Localizer.T("HasCustomIcon"),
         string.IsNullOrWhiteSpace(ActionsJson) ? null : Localizer.T("HasActions"),
         Markdown ? "Markdown" : null
     }.Where(x => !string.IsNullOrWhiteSpace(x)));

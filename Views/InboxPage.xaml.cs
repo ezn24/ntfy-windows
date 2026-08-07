@@ -125,6 +125,17 @@ public sealed partial class InboxPage : Page
         if (sender is Border card)
             card.Background = (Brush)Application.Current.Resources["CardBackgroundFillColorSecondaryBrush"];
     }
+    private void MessageIcon_ImageOpened(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement image && image.Parent is Border container)
+            container.Visibility = Visibility.Visible;
+    }
+
+    private void MessageIcon_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+    {
+        if (sender is FrameworkElement image && image.Parent is Border container)
+            container.Visibility = Visibility.Collapsed;
+    }
 
     private void ApplyFilters()
     {

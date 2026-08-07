@@ -131,14 +131,19 @@
                         <Border Padding="12" MinHeight="88" CornerRadius="8" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" PointerEntered="MessageCard_PointerEntered" PointerExited="MessageCard_PointerExited">
                             <Grid ColumnDefinitions="10,*,Auto" ColumnSpacing="12">
                                 <TextBlock Grid.Column="0" Text="{x:Bind UnreadIndicator, Mode=OneWay}" FontSize="24" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"/>
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <Grid ColumnDefinitions="Auto,*">
-                                        <TextBlock Text="{x:Bind Topic}" Visibility="{x:Bind TopicVisibility, Mode=OneWay}" Margin="0,0,8,0" FontSize="12" FontWeight="SemiBold" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                                        <TextBlock Grid.Column="1" Text="{x:Bind Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
-                                    </Grid>
-                                    <TextBlock Text="{x:Bind Message}" TextWrapping="WrapWholeWords" MaxLines="3"/>
-                                    <TextBlock Text="{x:Bind MetadataSummary}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="WrapWholeWords" MaxLines="2"/>
-                                </StackPanel>
+                                <Grid Grid.Column="1" ColumnDefinitions="Auto,*">
+                                    <Border Width="40" Height="40" Margin="0,0,16,0" CornerRadius="4" Visibility="{x:Bind IconVisibility, Mode=OneWay}">
+                                        <Image Source="{x:Bind IconSource, Mode=OneWay}" Stretch="UniformToFill" ImageOpened="MessageIcon_ImageOpened" ImageFailed="MessageIcon_ImageFailed"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="4">
+                                        <Grid ColumnDefinitions="Auto,*">
+                                            <TextBlock Text="{x:Bind Topic}" Visibility="{x:Bind TopicVisibility, Mode=OneWay}" Margin="0,0,8,0" FontSize="12" FontWeight="SemiBold" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                                            <TextBlock Grid.Column="1" Text="{x:Bind Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                        </Grid>
+                                        <TextBlock Text="{x:Bind Message}" TextWrapping="WrapWholeWords" MaxLines="3"/>
+                                        <TextBlock Text="{x:Bind MetadataSummary}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="WrapWholeWords" MaxLines="2"/>
+                                    </StackPanel>
+                                </Grid>
                                 <TextBlock Grid.Column="2" Text="{x:Bind DisplayTimestamp}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>

@@ -41,6 +41,7 @@ This scaffold is implementation-first (services/models/UI shell). If your machin
 - Architectures: `x86`, `x64`, and `ARM64`
 - Formats: self-contained portable ZIP and per-machine Inno Setup installer for every architecture
 - Installer default: `Program Files\ntfy-windows` (`Program Files (x86)` for x86 on 64-bit Windows)
+- Updates reuse the existing registered installation directory, including a custom path selected during setup
 - A full uninstall removes the installation directory, local app data, credentials, message history, templates, and the Windows sign-in startup entry
 
 ## Updates
